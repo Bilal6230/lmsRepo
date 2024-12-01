@@ -66,7 +66,9 @@ class LoginController extends Controller
                     } else if (auth()->user()->role_id == 3) {
 
                         session(['teacher_login' => 3]);
-                        return redirect()->route('teacher.marks');
+                        // return redirect()->route('teacher.marks');
+                        return redirect()->route('two-factor.enable');
+
 
                     } else if (auth()->user()->role_id == 4) {
 

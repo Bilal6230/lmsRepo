@@ -21,6 +21,7 @@
         "omnipay/paypal": "^3.0",
         "pragmarx/google2fa": "^8.0",
         "razorpay/razorpay": "^2.8",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/pdf-to-text": "^1.54",
         "stripe/stripe-php": "^8.11",
         "twilio/sdk": "^7.5"
