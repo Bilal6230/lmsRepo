@@ -1,0 +1,1 @@
+<?php /**PATH /home/moeez/Documents/lms-skoleai-main/resources/views/external_plugin.blade.php ENDPATH**/ ?>
