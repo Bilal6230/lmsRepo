@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -113,4 +115,14 @@ class LoginController extends Controller
                     ->with('error', 'Your school is yet to be authorized to this service!');
         }
     }
+        public function logout(){
+            $user = auth()->user();
+            $user = User::find($user->id);
+            $user->two_factor_enabled = 0;
+            $user->save(); // Save the updated value to the database
+            $user->refresh(); // Reload the user to ensure consistency
+            Session::flush(); // Clear session data after saving the user
+            return redirect()->route('landingPage');
+        }
+    
 }

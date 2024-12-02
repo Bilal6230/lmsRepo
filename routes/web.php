@@ -510,6 +510,7 @@ Route::controller(TwoFactorAuthController::class)->middleware('teacher', 'auth')
     Route::post('two-factor/enable', 'enable');
     Route::get('two-factor/disable', 'disable')->name('two-factor.disable');
     Route::get('two-factor/generate-secret', 'generateSecret')->name('two-factor.generate-secret');
+    Route::get('two-factor/new-otp', 'newOTP')->name('new.opt');
 });
 Route::controller(TeacherController::class)->middleware('teacher', 'auth')->group(function () {
 

@@ -20,21 +20,34 @@ class TwoFactorAuthController extends Controller
     public function showEnableForm()
     {
         $user = auth()->user();
+        $QR_Image = null;
+        if ($user->two_factor_secret = "") {
+            $QR_Image = $this->genrateQR();
+        }
+        
+        return view('auth.twofactor.enable', compact('QR_Image'));
+    }
+    public function genrateQR()
+    {
+        $user = auth()->user();
         $this->generateSecret();
-        // dd($user->two_factor_secret);
-        // Generate the URL for the QR code
         $QR_Code_Url = $this->google2fa->getQRCodeUrl(
             config('app.name'), // Your application name
             $user->email, // User's email (or username)
             $user->two_factor_secret // The secret key for the user
         );
-    
-        // Use the QR Code URL to generate the image
-        $QR_Image = QrCode::size(200)->generate($QR_Code_Url); // You can adjust the size as needed
-    
-        return view('auth.twofactor.enable', compact('QR_Image'));
+        $QR_Image = QrCode::size(200)->generate($QR_Code_Url);
+        return $QR_Image;
     }
+    public function newOTP()
+    {
+        $user = auth()->user();
+        $user->two_factor_secret = "";
+        $user->save();
+        $QR_Image = $this->genrateQR();
+        return view('auth.twofactor.enable', compact('QR_Image'));
 
+    }
     // Enable 2FA for the user
     public function enable(Request $request)
     {
@@ -66,10 +79,11 @@ class TwoFactorAuthController extends Controller
     public function generateSecret()
     {
         $user = auth()->user();
+
         $google2fa = app('pragmarx.google2fa');
-        
+
         $secret = $google2fa->generateSecretKey();
-        
+
         $user->two_factor_secret = $secret;
         $user->save();
 

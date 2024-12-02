@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,11 @@ class TeacherMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(auth()->user()->role_id =='3'){
-            return $next($request);
+            $user = auth()->user();
+            $user = User::find($user->id);
+            if ($user->two_factor_enabled = 1) {
+                return $next($request);
+            }
         }else{
             return redirect()->back();
         }
