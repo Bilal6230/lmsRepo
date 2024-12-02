@@ -14,14 +14,13 @@ class TwoFactorAuthController extends Controller
     public function __construct(Google2FA $google2fa)
     {
         $this->google2fa = $google2fa;
-        $this->generateSecret();
-
     }
 
     // Show the form to enable 2FA
     public function showEnableForm()
     {
         $user = auth()->user();
+        $this->generateSecret();
         // dd($user->two_factor_secret);
         // Generate the URL for the QR code
         $QR_Code_Url = $this->google2fa->getQRCodeUrl(
@@ -47,7 +46,7 @@ class TwoFactorAuthController extends Controller
         if ($validated) {
             $user->two_factor_enabled = true;
             $user->save();
-            return redirect()->route('dashboard')->with('success', '2FA enabled successfully');
+            return redirect()->route('teacher.marks')->with('success', '2FA enabled successfully');
         }
 
         return back()->with('error', 'Invalid OTP code');
@@ -67,11 +66,10 @@ class TwoFactorAuthController extends Controller
     public function generateSecret()
     {
         $user = auth()->user();
-        dd($user);
         $google2fa = app('pragmarx.google2fa');
-
+        
         $secret = $google2fa->generateSecretKey();
-
+        
         $user->two_factor_secret = $secret;
         $user->save();
 
